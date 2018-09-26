@@ -13,6 +13,7 @@ public class RoboticPetTest {
 
 	@Test
 	public void shouldBeAbleToOilRoboticPet() {
+		underTest.tick();
 		int oilBeforeOiling = underTest.getOilLevel();
 		underTest.oil();
 		int oilAfterOiling = underTest.getOilLevel();

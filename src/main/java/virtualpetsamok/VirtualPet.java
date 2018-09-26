@@ -1,10 +1,10 @@
 package virtualpetsamok;
 
-public class VirtualPet {
+public abstract class VirtualPet {
 
 	private static final int DEFAULT_PET_HEALTH = 100;
 	protected int health = DEFAULT_PET_HEALTH;
-	
+
 	private String petDescription;
 	private String petName;
 
@@ -22,16 +22,14 @@ public class VirtualPet {
 	}
 
 	public int getHealth() {
-		return health ;
-	}
-	
-	public void calculateHealthImpact() {
-		
-	}
-	
-	public void tick() {
-		
+		return health;
 	}
 
+	public void calculateHealthImpact() {
+	}
+	
+	public abstract void play();
+
+	public abstract void tick();
 
 }

@@ -10,12 +10,17 @@ public class VirtualPetShelter {
 
 	public void dropOffHomelessPet(VirtualPet pet) {
 		shelterPets.put(pet.getPetName(), pet);
-
 	}
 
 	public VirtualPet getPet(String petName) {
 		return shelterPets.get(petName);
+	}
 
+	public String playWithAPet(String petName) {
+		for (VirtualPet shelterpet : shelterPets.values()) {
+			shelterpet.play();
+		}
+		return "You played with " + petName + "!";
 	}
 
 	public Collection<VirtualPet> getListOfPets() {
@@ -24,25 +29,18 @@ public class VirtualPetShelter {
 
 	public void adoptAPet(String petName) {
 		shelterPets.remove(petName);
-
 	}
 
 	public void tick() {
 		for (VirtualPet shelterpet : shelterPets.values()) {
-			if (shelterpet instanceof OrganicPet) {
-				((OrganicPet) shelterpet).tick();
-			} else {
-				((RoboticPet) shelterpet).tick();
-			}
+			shelterpet.tick();
 		}
-
 	}
 
 	public void feedPets() {
 		for (VirtualPet shelterpet : shelterPets.values()) {
 			if (shelterpet instanceof OrganicPet) {
 				((OrganicPet) shelterpet).feed();
-
 			}
 		}
 	}
@@ -53,12 +51,19 @@ public class VirtualPetShelter {
 				((OrganicPet) shelterpet).water();
 			}
 		}
+	}
 
+	public void oilPets() {
+		for (VirtualPet shelterpet : shelterPets.values()) {
+			if (shelterpet instanceof RoboticPet) {
+				((RoboticPet) shelterpet).oil();
+			}
+		}
 	}
 
 	public void takePetToVet(String petName) {
 		for (VirtualPet shelterpet : shelterPets.values()) {
-			if (shelterpet instanceof OrganicPet) {
+			if (shelterpet instanceof OrganicPet && shelterpet.getPetName().equalsIgnoreCase(petName)) {
 				((OrganicPet) shelterpet).treatPet();
 			} else {
 				System.out.println("Please see the shelter Mechanic for treatment of Robotic Pets...");
@@ -68,31 +73,47 @@ public class VirtualPetShelter {
 
 	public void takePetToMechanic(String petName) {
 		for (VirtualPet shelterpet : shelterPets.values()) {
-			if (shelterpet instanceof RoboticPet) {
+			if (shelterpet instanceof RoboticPet && shelterpet.getPetName().equalsIgnoreCase(petName)) {
 				((RoboticPet) shelterpet).repairPet();
 			} else {
 				System.out.println("Please see the shelter Veterinarian for treatment of Organic Pets...");
 			}
 		}
-
-	}
-
-	public int checkCagesForWaste() {
-		int wasteCount = 0;
-		for (VirtualPet shelterpet : shelterPets.values()) {
-			if (shelterpet instanceof Dog) {
-				wasteCount += ((Dog) shelterpet).getWaste();
-			}
-		}
-		return wasteCount;
 	}
 
 	public void cleanShelterCages() {
 		for (VirtualPet shelterpet : shelterPets.values()) {
 			if (shelterpet instanceof Dog) {
-				((OrganicPet) shelterpet).setWaste(0);
+				((Dog) shelterpet).setWaste(0);
 			}
 		}
-		
+	}
+
+	public void cleanShelterLitterBoxes() {
+		for (VirtualPet shelterpet : shelterPets.values()) {
+			if (shelterpet instanceof Cat) {
+				((Cat) shelterpet).setWaste(0);
+			}
+		}
+	}
+
+	public void dustRoboticPets() {
+		for (VirtualPet shelterpet : shelterPets.values()) {
+			if (shelterpet instanceof RoboticPet) {
+				((RoboticPet) shelterpet).dustWithCompressedAir();
+			}
+		}
+	}
+	
+	public boolean deadPetCheck() {
+		for (VirtualPet shelterpet : shelterPets.values()) {
+			if (shelterpet instanceof OrganicPet) {
+				if (!((OrganicPet) shelterpet).getIsAlive()) {
+					return true;
+					
+				} 
+			
+			} 
+		} return false; 
 	}
 }

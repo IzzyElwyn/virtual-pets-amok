@@ -2,13 +2,13 @@ package virtualpetsamok;
 
 public class OrganicPet extends VirtualPet {
 
-	public static final int MAX_ORGANIC_PET_HUNGER = 100;
+	private static final int MAX_ORGANIC_PET_HUNGER = 100;
 	private static final int MAX_ORGANIC_PET_THIRST = 100;
 	protected static final int MAX_ORGANIC_PET_WASTEURGENCY = 100;
 	private static final int MIN_ORGANIC_PET_WASTE = 0;
 	private static final Boolean DEFAULT_ORGANIC_PET_ALIVE = true;
 
-	public int hunger = MAX_ORGANIC_PET_HUNGER;
+	private int hunger = MAX_ORGANIC_PET_HUNGER;
 	private int thirst = MAX_ORGANIC_PET_THIRST;
 	protected int wasteUrgency = MAX_ORGANIC_PET_WASTEURGENCY;
 	private int waste = MIN_ORGANIC_PET_WASTE;
@@ -31,7 +31,7 @@ public class OrganicPet extends VirtualPet {
 	}
 
 	public void setWaste(int wasteAmount) {
-		waste = 0;
+		waste = wasteAmount;
 
 	}
 
@@ -68,7 +68,14 @@ public class OrganicPet extends VirtualPet {
 
 	public void treatPet() {
 		health = 100;
+	}
 
+	public void play() {
+		if ((thirst - 2) < 0) {
+			thirst = 0;
+		} else {
+			thirst -= 2;
+		}
 	}
 
 	private void generateWasteCheck() {
@@ -76,7 +83,6 @@ public class OrganicPet extends VirtualPet {
 			waste++;
 			wasteUrgency = MAX_ORGANIC_PET_WASTEURGENCY;
 		}
-
 	}
 
 	@Override
@@ -91,10 +97,10 @@ public class OrganicPet extends VirtualPet {
 		} else {
 			thirst -= 2;
 		}
-		if ((wasteUrgency - 2) < 0) {
+		if ((wasteUrgency - 5) < 0) {
 			wasteUrgency = 0;
 		} else {
-			wasteUrgency -= 2;
+			wasteUrgency -= 5;
 		}
 
 		generateWasteCheck();
@@ -133,5 +139,4 @@ public class OrganicPet extends VirtualPet {
 	private void dead() {
 		setIsAlive(false);
 	}
-
 }

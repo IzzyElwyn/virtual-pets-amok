@@ -24,7 +24,7 @@ public class VirtualPetShelterTest {
 		VirtualPet check = underTest.getPet("Rey");
 		assertThat(check, is(dog));
 	}
-	
+
 	@Test
 	public void assertThatYouCanReturnACollectionOfPetsInTheShelter() {
 		underTest.dropOffHomelessPet(dog);
@@ -33,7 +33,7 @@ public class VirtualPetShelterTest {
 		Collection<?> expectedResult = underTest.shelterPets.values();
 		assertThat(animalList, is(expectedResult));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToAdaptPet() {
 		underTest.dropOffHomelessPet(dog);
@@ -41,7 +41,18 @@ public class VirtualPetShelterTest {
 		Collection<?> animalList = underTest.getListOfPets();
 		assertTrue(animalList.isEmpty());
 	}
-	
+
+	@Test
+	public void shouldBeAbleToOilRoboticPets() {
+		underTest.dropOffHomelessPet(robodog);
+		underTest.tick();
+		int oilBeforeOiling = ((RoboticPet) underTest.getPet("K-9")).getOilLevel();
+		underTest.oilPets();
+		int oilAfterOiling = ((RoboticPet) underTest.getPet("K-9")).getOilLevel();
+		int check = oilAfterOiling - oilBeforeOiling;
+		assertThat(check, is(2));
+	}
+
 	@Test
 	public void shouldBeAbleToFeedOrganicPets() {
 		underTest.dropOffHomelessPet(dog);
@@ -52,18 +63,18 @@ public class VirtualPetShelterTest {
 		int check = hungerAfterFeeding - hungerBeforeFeeding;
 		assertThat(check, is(2));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToWaterOrganicPets() {
 		underTest.dropOffHomelessPet(dog);
 		underTest.tick();
-		int thirstBeforeWatering = ((OrganicPet)underTest.getPet("Rey")).getThirst();
+		int thirstBeforeWatering = ((OrganicPet) underTest.getPet("Rey")).getThirst();
 		underTest.waterPets();
-		int thirstAfterWatering = ((OrganicPet)underTest.getPet("Rey")).getThirst();
-		int check = thirstAfterWatering -thirstBeforeWatering;
+		int thirstAfterWatering = ((OrganicPet) underTest.getPet("Rey")).getThirst();
+		int check = thirstAfterWatering - thirstBeforeWatering;
 		assertThat(check, is(2));
 	}
-	
+
 	@Test
 	public void shouldBeAbleToTakeOrganicPetToVet() {
 		underTest.dropOffHomelessPet(dog);
@@ -72,9 +83,9 @@ public class VirtualPetShelterTest {
 		underTest.takePetToVet("Rey");
 		int healthCheckAfterVet = underTest.getPet("Rey").getHealth();
 		assertTrue(healthCheckAfterVet > healthCheckBeforeVet);
-		
+
 	}
-	
+
 	@Test
 	public void shouldBeAbleToTakeRoboticPetToMechanic() {
 		underTest.dropOffHomelessPet(robodog);
@@ -83,26 +94,62 @@ public class VirtualPetShelterTest {
 		underTest.takePetToMechanic("K-9");
 		int healthCheckAfterVet = underTest.getPet("K-9").getHealth();
 		assertTrue(healthCheckAfterVet > healthCheckBeforeVet);
-		
+
 	}
-	
+
 	@Test
 	public void shouldBeAbleToCleanWasteFromOrganicDogCages() {
 		underTest.dropOffHomelessPet(dog);
 		tickTest();
-		int wasteBeforeCleaning = underTest.checkCagesForWaste();
+		int wasteBeforeCleaning = ((OrganicPet)underTest.getPet("Rey")).getWaste();
 		underTest.cleanShelterCages();
-		int wasteAfterCleaning = underTest.checkCagesForWaste();
+		int wasteAfterCleaning = ((OrganicPet)underTest.getPet("Rey")).getWaste();
 		assertTrue(wasteAfterCleaning < wasteBeforeCleaning);
-		
+
+	}
+
+	@Test
+	public void shouldBeAbleToCleanOutLitterBoxesForDaKitties() {
+		underTest.dropOffHomelessPet(cat);
+		tickTest();
+		int wasteBeforeCleaning = ((OrganicPet)underTest.getPet("Crookshanks")).getWaste();
+		underTest.cleanShelterLitterBoxes();
+		int wasteAfterCleaning = ((OrganicPet)underTest.getPet("Crookshanks")).getWaste();
+		assertTrue(wasteAfterCleaning < wasteBeforeCleaning);
+
+	}
+
+	@Test
+	public void shouldBeAbleToPlayWithAPet() {
+		underTest.dropOffHomelessPet(dog);
+		String check = underTest.playWithAPet("Rey");
+		assertThat(check, is("You played with Rey!"));
+	}
+
+	@Test
+	public void shouldBeAbleToPlayWithAPetAndAdverselyAffectThirstForOrganics() {
+		underTest.dropOffHomelessPet(dog);
+		int thirstBeforePlaying = ((OrganicPet) underTest.getPet("Rey")).getThirst();
+		underTest.playWithAPet("Rey");
+		int thirstAfterPlaying = ((OrganicPet) underTest.getPet("Rey")).getThirst();
+		assertTrue(thirstBeforePlaying > thirstAfterPlaying);
+	}
+
+	@Test
+	public void shouldBeAbleToPlayWithAPetAndPositivelyImpactDustForRobotics() {
+		underTest.dropOffHomelessPet(robocat);
+		underTest.tick();
+		int dustBeforePlaying = ((RoboticPet) underTest.getPet("Ripley")).getDustBuildUp();
+		underTest.playWithAPet("Ripley");
+		int dustAfterPlaying = ((RoboticPet) underTest.getPet("Ripley")).getDustBuildUp();
+		assertTrue(dustAfterPlaying < dustBeforePlaying);
 	}
 
 	private void tickTest() {
 		while (tickTimer > 0) {
-		underTest.tick();
-		tickTimer--;
+			underTest.tick();
+			tickTimer--;
 		}
 	}
-	
 
 }
