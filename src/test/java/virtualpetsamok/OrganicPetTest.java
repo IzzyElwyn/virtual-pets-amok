@@ -61,7 +61,7 @@ public class OrganicPetTest {
 			tickTally--;
 		}
 		int check = underTest.getWaste();
-		assertThat(check, is(1));
+		assertThat(check, is(2));
 
 	}
 

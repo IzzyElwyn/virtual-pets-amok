@@ -2,11 +2,9 @@ package virtualpetsamok;
 
 public class RoboticPet extends VirtualPet {
 
-
 	private static final int MAX_ROBOTICPET_OIL_LEVEL = 100;
 	protected static final int MIN_ROBOTICPET_DUST_BUILDUP = 0;
 	private static final int DEFAULT_ROBOTICPET_DUST_BUNNIES = 0;
-
 
 	protected int oilLevel = MAX_ROBOTICPET_OIL_LEVEL;
 	protected int dustBuildUp = MIN_ROBOTICPET_DUST_BUILDUP;
@@ -16,9 +14,12 @@ public class RoboticPet extends VirtualPet {
 		return oilLevel;
 	}
 
-	
 	public int getDustBuildUp() {
 		return dustBuildUp;
+	}
+
+	public int getDustBunnies() {
+		return dustBunnies;
 	}
 
 	public RoboticPet(String petName, String petDescription) {
@@ -28,18 +29,18 @@ public class RoboticPet extends VirtualPet {
 	public RoboticPet(String petName, String petDescription, int oilLevel) {
 		super(petName, petDescription);
 		this.oilLevel = oilLevel;
-
-
 	}
 
 	public void oil() {
-		oilLevel += 50;
-
+		if ((oilLevel + 50) > 100) {
+			oilLevel = 100;
+		} else {
+			oilLevel += 50;
+		}
 	}
 
 	public void dustWithCompressedAir() {
 		dustBuildUp = 0;
-
 	}
 
 	private void generateDustBunnyCheck() {
@@ -47,12 +48,10 @@ public class RoboticPet extends VirtualPet {
 			dustBunnies++;
 			dustBuildUp = MIN_ROBOTICPET_DUST_BUILDUP;
 		}
-
 	}
 
 	@Override
 	public void tick() {
-
 		if ((oilLevel - 2) < 0) {
 			oilLevel = 0;
 		} else {
@@ -63,7 +62,6 @@ public class RoboticPet extends VirtualPet {
 		} else {
 			dustBuildUp += 2;
 		}
-
 		generateDustBunnyCheck();
 		calculateHealthImpact();
 	}
@@ -83,18 +81,21 @@ public class RoboticPet extends VirtualPet {
 			} else {
 				health -= (dustBunnies * 2);
 			}
-
 		}
 	}
-
 
 	public void repairPet() {
 		dustBunnies = 0;
 		dustBuildUp = 0;
 		health = 100;
-		
+		oilLevel = 100;
 	}
 
-
-
+	public void play() {
+		if ((dustBuildUp - 10) < 0) {
+			dustBuildUp = 0;
+		} else {
+			dustBuildUp -= 10;
+		}
+	}
 }

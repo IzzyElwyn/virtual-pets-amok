@@ -12,7 +12,6 @@ public class RobotDog extends RoboticPet implements Walkable {
 
 	}
 
-	@Override
 	public void goForAWalk() {
 		oilLevel -= 25;
 		dustBuildUp = MIN_ROBOTICPET_DUST_BUILDUP;
